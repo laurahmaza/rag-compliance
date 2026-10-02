@@ -1,0 +1,682 @@
+# Corpus: NIST AI 100-1, Artificial Intelligence Risk Management Framework (AI RMF 1.0)
+# Source: https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf (January 2023)
+# U.S. government publication — public domain, no copyright restriction.
+# Chunked by document structure (section/subsection boundaries), not fixed size —
+# each chunk is one coherent unit of the framework (a subsection, or one GOVERN/MAP/
+# MEASURE/MANAGE category with its subcategories).
+
+documents:
+  - id: exec_summary
+    section: "Executive Summary"
+    text: >
+      Artificial intelligence (AI) technologies have significant potential to transform
+      society and people's lives. AI technologies also pose risks that can negatively
+      impact individuals, groups, organizations, communities, society, the environment,
+      and the planet. The AI RMF refers to an AI system as an engineered or machine-based
+      system that can, for a given set of objectives, generate outputs such as predictions,
+      recommendations, or decisions influencing real or virtual environments. As directed
+      by the National Artificial Intelligence Initiative Act of 2020, the goal of the AI RMF
+      is to offer a resource to organizations designing, developing, deploying, or using AI
+      systems to help manage the many risks of AI and promote trustworthy and responsible
+      development and use of AI systems. The Framework is intended to be voluntary,
+      rights-preserving, non-sector-specific, and use-case agnostic. The Framework is
+      divided into two parts. Part 1 discusses how organizations can frame the risks
+      related to AI and describes the intended audience, then analyzes AI risks and
+      trustworthiness. Part 2 comprises the Core of the Framework, describing four
+      specific functions — GOVERN, MAP, MEASURE, and MANAGE — broken down into
+      categories and subcategories.
+
+  - id: framing_risk
+    section: "1. Framing Risk / 1.1 Understanding and Addressing Risks, Impacts, and Harms"
+    text: >
+      AI risk management offers a path to minimize potential negative impacts of AI
+      systems, such as threats to civil liberties and rights, while also providing
+      opportunities to maximize positive impacts. In the context of the AI RMF, risk
+      refers to the composite measure of an event's probability of occurring and the
+      magnitude or degree of the consequences of the corresponding event. When considering
+      the negative impact of a potential event, risk is a function of 1) the negative
+      impact, or magnitude of harm, that would arise if the circumstance or event occurs
+      and 2) the likelihood of occurrence. Negative impact or harm can be experienced by
+      individuals, groups, communities, organizations, society, the environment, and the
+      planet. Risk management refers to coordinated activities to direct and control an
+      organization with regard to risk. Effectively managing the risk of potential harms
+      could lead to more trustworthy AI systems and unleash potential benefits to people,
+      organizations, and systems/ecosystems.
+
+  - id: risk_measurement
+    section: "1.2.1 Risk Measurement"
+    text: >
+      AI risks or failures that are not well-defined or adequately understood are
+      difficult to measure quantitatively or qualitatively. Risk measurement challenges
+      include: risks related to third-party software, hardware, and data; tracking
+      emergent risks; availability of reliable metrics (there is currently a lack of
+      consensus on robust and verifiable measurement methods for risk and trustworthiness);
+      risk at different stages of the AI lifecycle (measuring risk at an earlier stage may
+      yield different results than measuring at a later stage, and some risks may be latent
+      and increase as AI systems adapt and evolve); risk in real-world settings (lab
+      measurements may differ from risks that emerge in operational settings);
+      inscrutability (opaque AI systems complicate risk measurement); and the need for a
+      human baseline for AI systems intended to augment or replace human activity.
+
+  - id: risk_tolerance
+    section: "1.2.2 Risk Tolerance"
+    text: >
+      While the AI RMF can be used to prioritize risk, it does not prescribe risk
+      tolerance. Risk tolerance refers to the organization's or AI actor's readiness to
+      bear the risk in order to achieve its objectives. Risk tolerance can be influenced
+      by legal or regulatory requirements. Risk tolerance and the level of risk that is
+      acceptable to organizations or society are highly contextual and application- and
+      use-case-specific. The Framework is intended to be flexible and to augment existing
+      risk practices which should align with applicable laws, regulations, and norms.
+      Organizations should follow existing regulations and guidelines for risk criteria,
+      tolerance, and response established by organizational, domain, discipline, sector,
+      or professional requirements. Where established guidelines do not exist,
+      organizations should define reasonable risk tolerance.
+
+  - id: risk_prioritization
+    section: "1.2.3 Risk Prioritization"
+    text: >
+      Attempting to eliminate negative risk entirely can be counterproductive in practice
+      because not all incidents and failures can be eliminated. Policies and resources
+      should be prioritized based on the assessed risk level and potential impact of an AI
+      system. When applying the AI RMF, risks which the organization determines to be
+      highest for the AI systems within a given context of use call for the most urgent
+      prioritization and most thorough risk management process. In cases where an AI
+      system presents unacceptable negative risk levels — such as where significant
+      negative impacts are imminent, severe harms are actually occurring, or catastrophic
+      risks are present — development and deployment should cease in a safe manner until
+      risks can be sufficiently managed. Residual risk — risk remaining after risk
+      treatment — directly impacts end users or affected individuals and communities.
+
+  - id: org_integration
+    section: "1.2.4 Organizational Integration and Management of Risk"
+    text: >
+      AI risks should not be considered in isolation. Different AI actors have different
+      responsibilities and awareness depending on their roles in the lifecycle. AI risk
+      management should be integrated and incorporated into broader enterprise risk
+      management strategies and processes. Treating AI risks along with other critical
+      risks, such as cybersecurity and privacy, will yield a more integrated outcome and
+      organizational efficiencies. Organizations need to establish and maintain the
+      appropriate accountability mechanisms, roles and responsibilities, culture, and
+      incentive structures for risk management to be effective. Effective risk management
+      is realized through organizational commitment at senior levels and may require
+      cultural change within an organization or industry.
+
+  - id: audience
+    section: "2. Audience"
+    text: >
+      Identifying and managing AI risks and potential impacts requires a broad set of
+      perspectives and actors across the AI lifecycle. The AI RMF is intended to be used
+      by AI actors across the AI lifecycle and dimensions: Application Context, Data and
+      Input, AI Model, and Task and Output. AI actors involved in these dimensions who
+      perform or manage the design, development, deployment, evaluation, and use of AI
+      systems and drive AI risk management efforts are the primary AI RMF audience. The
+      People & Planet dimension represents human rights and the broader well-being of
+      society and the planet; AI actors in this dimension — trade associations, standards
+      developing organizations, researchers, advocacy groups, environmental groups, civil
+      society organizations, end users, and potentially impacted individuals and
+      communities — comprise a separate AI RMF audience who informs the primary audience.
+
+  - id: trustworthiness_intro
+    section: "3. AI Risks and Trustworthiness (introduction)"
+    text: >
+      For AI systems to be trustworthy, they often need to be responsive to a multiplicity
+      of criteria that are of value to interested parties. This Framework articulates the
+      following characteristics of trustworthy AI: valid and reliable, safe, secure and
+      resilient, accountable and transparent, explainable and interpretable,
+      privacy-enhanced, and fair with harmful bias managed. Creating trustworthy AI
+      requires balancing each of these characteristics based on the AI system's context of
+      use. Addressing AI trustworthiness characteristics individually will not ensure AI
+      system trustworthiness; tradeoffs are usually involved. Trustworthiness is a social
+      concept that ranges across a spectrum and is only as strong as its weakest
+      characteristic.
+
+  - id: valid_reliable
+    section: "3.1 Valid and Reliable"
+    text: >
+      Validation is the confirmation, through the provision of objective evidence, that
+      the requirements for a specific intended use or application have been fulfilled.
+      Deployment of AI systems which are inaccurate, unreliable, or poorly generalized to
+      data and settings beyond their training creates and increases negative AI risks and
+      reduces trustworthiness. Reliability is the ability of an item to perform as
+      required, without failure, for a given time interval, under given conditions.
+      Accuracy is the closeness of results of observations, computations, or estimates to
+      the true values. Robustness or generalizability is the ability of a system to
+      maintain its level of performance under a variety of circumstances, including uses of
+      AI systems not initially anticipated.
+
+  - id: safe
+    section: "3.2 Safe"
+    text: >
+      AI systems should not, under defined conditions, lead to a state in which human
+      life, health, property, or the environment is endangered. Safe operation of AI
+      systems is improved through responsible design, development, and deployment
+      practices; clear information to deployers on responsible use of the system;
+      responsible decision-making by deployers and end users; and explanations and
+      documentation of risks based on empirical evidence of incidents. Safety risks that
+      pose a potential risk of serious injury or death call for the most urgent
+      prioritization and most thorough risk management process. Practical approaches for
+      AI safety often relate to rigorous simulation and in-domain testing, real-time
+      monitoring, and the ability to shut down, modify, or have human intervention into
+      systems that deviate from intended or expected functionality.
+
+  - id: secure_resilient
+    section: "3.3 Secure and Resilient"
+    text: >
+      AI systems may be said to be resilient if they can withstand unexpected adverse
+      events or unexpected changes in their environment or use, or if they can maintain
+      their functions and structure in the face of internal and external change and
+      degrade safely and gracefully when necessary. Common security concerns relate to
+      adversarial examples, data poisoning, and the exfiltration of models, training data,
+      or other intellectual property through AI system endpoints. AI systems that can
+      maintain confidentiality, integrity, and availability through protection mechanisms
+      that prevent unauthorized access and use may be said to be secure. While resilience
+      is the ability to return to normal function after an unexpected adverse event,
+      security includes resilience but also encompasses protocols to avoid, protect
+      against, respond to, or recover from attacks.
+
+  - id: accountable_transparent
+    section: "3.4 Accountable and Transparent"
+    text: >
+      Trustworthy AI depends upon accountability. Accountability presupposes transparency.
+      Transparency reflects the extent to which information about an AI system and its
+      outputs is available to individuals interacting with such a system, regardless of
+      whether they are even aware that they are doing so. This characteristic's scope spans
+      from design decisions and training data to model training, the structure of the
+      model, its intended use cases, and how and when deployment or post-deployment
+      decisions were made and by whom. Transparency is often necessary for actionable
+      redress related to AI system outputs that are incorrect or otherwise lead to negative
+      impacts. Maintaining the provenance of training data and supporting attribution of
+      the AI system's decisions to subsets of training data can assist with both
+      transparency and accountability.
+
+  - id: explainable_interpretable
+    section: "3.5 Explainable and Interpretable"
+    text: >
+      Explainability refers to a representation of the mechanisms underlying AI systems'
+      operation, whereas interpretability refers to the meaning of AI systems' output in
+      the context of their designed functional purposes. Risk from lack of explainability
+      may be managed by describing how AI systems function, with descriptions tailored to
+      individual differences such as the user's role, knowledge, and skill level.
+      Transparency can answer the question of "what happened" in the system. Explainability
+      can answer the question of "how" a decision was made in the system. Interpretability
+      can answer the question of "why" a decision was made by the system and its meaning or
+      context to the user.
+
+  - id: privacy_enhanced
+    section: "3.6 Privacy-Enhanced"
+    text: >
+      Privacy refers generally to the norms and practices that help to safeguard human
+      autonomy, identity, and dignity — addressing freedom from intrusion, limiting
+      observation, or individuals' agency to consent to disclosure or control of facets of
+      their identities. Privacy values such as anonymity, confidentiality, and control
+      generally should guide choices for AI system design, development, and deployment.
+      Privacy-related risks may influence security, bias, and transparency and come with
+      tradeoffs with these other characteristics. AI systems can present new risks to
+      privacy by allowing inference to identify individuals or previously private
+      information about individuals. Privacy-enhancing technologies (PETs), as well as data
+      minimizing methods such as de-identification and aggregation, can support design for
+      privacy-enhanced AI systems.
+
+  - id: fair_bias
+    section: "3.7 Fair – with Harmful Bias Managed"
+    text: >
+      Fairness in AI includes concerns for equality and equity by addressing issues such
+      as harmful bias and discrimination. Standards of fairness can be complex and
+      difficult to define because perceptions of fairness differ among cultures and may
+      shift depending on application. NIST has identified three major categories of AI
+      bias to be considered and managed: systemic, computational and statistical, and
+      human-cognitive. Systemic bias can be present in AI datasets, organizational norms,
+      practices, and processes across the AI lifecycle, and the broader society that uses
+      AI systems. Computational and statistical biases often stem from systematic errors
+      due to non-representative samples. Human-cognitive biases relate to how an individual
+      or group perceives AI system information to make a decision or fill in missing
+      information.
+
+  - id: effectiveness
+    section: "4. Effectiveness of the AI RMF"
+    text: >
+      Evaluations of AI RMF effectiveness — including ways to measure bottom-line
+      improvements in the trustworthiness of AI systems — will be part of future NIST
+      activities, in conjunction with the AI community. Organizations are encouraged to
+      periodically evaluate whether the AI RMF has improved their ability to manage AI
+      risks, including their policies, processes, practices, implementation plans,
+      indicators, measurements, and expected outcomes. Framework users are expected to
+      benefit from enhanced processes for governing, mapping, measuring, and managing AI
+      risk; improved awareness of tradeoffs among trustworthiness characteristics; explicit
+      processes for go/no-go system commissioning decisions; and augmented capacity for
+      test, evaluation, verification, and validation (TEVV) of AI systems.
+
+  - id: core_intro
+    section: "5. AI RMF Core (introduction)"
+    text: >
+      The AI RMF Core provides outcomes and actions that enable dialogue, understanding,
+      and activities to manage AI risks and responsibly develop trustworthy AI systems.
+      The Core is composed of four functions: GOVERN, MAP, MEASURE, and MANAGE. Each
+      high-level function is broken down into categories and subcategories, which are
+      subdivided into specific actions and outcomes. Actions do not constitute a checklist,
+      nor are they necessarily an ordered set of steps. After instituting the outcomes in
+      GOVERN, most users of the AI RMF would start with the MAP function and continue to
+      MEASURE or MANAGE, though the process should be iterative with cross-referencing
+      between functions as necessary.
+
+  - id: govern_function
+    section: "5.1 Govern (function description)"
+    text: >
+      The GOVERN function cultivates and implements a culture of risk management within
+      organizations designing, developing, deploying, evaluating, or acquiring AI systems;
+      outlines processes, documents, and organizational schemes that anticipate, identify,
+      and manage the risks a system can pose; incorporates processes to assess potential
+      impacts; provides a structure by which AI risk management functions can align with
+      organizational principles, policies, and strategic priorities; and addresses the full
+      product lifecycle including legal issues concerning third-party software or hardware
+      and data. GOVERN is a cross-cutting function infused throughout AI risk management
+      and enables the other three functions.
+
+  - id: govern_1
+    section: "GOVERN 1 — Policies, processes, procedures, and practices across the organization"
+    text: >
+      GOVERN 1: Policies, processes, procedures, and practices across the organization
+      related to mapping, measuring, and managing AI risks are in place, transparent, and
+      implemented effectively. Subcategories: legal and regulatory requirements involving
+      AI are understood, managed, and documented (1.1); characteristics of trustworthy AI
+      are integrated into organizational policies, processes, procedures, and practices
+      (1.2); processes determine the needed level of risk management activities based on
+      organizational risk tolerance (1.3); the risk management process and its outcomes are
+      established through transparent policies and controls (1.4); ongoing monitoring and
+      periodic review of the risk management process are planned with clearly defined roles
+      (1.5); mechanisms are in place to inventory AI systems (1.6); and processes are in
+      place for decommissioning and phasing out AI systems safely (1.7).
+
+  - id: govern_2
+    section: "GOVERN 2 — Accountability structures"
+    text: >
+      GOVERN 2: Accountability structures are in place so that the appropriate teams and
+      individuals are empowered, responsible, and trained for mapping, measuring, and
+      managing AI risks. Subcategories: roles and responsibilities and lines of
+      communication related to AI risk management are documented and clear throughout the
+      organization (2.1); personnel and partners receive AI risk management training to
+      perform their duties consistent with related policies (2.2); and executive leadership
+      takes responsibility for decisions about risks associated with AI system development
+      and deployment (2.3).
+
+  - id: govern_3
+    section: "GOVERN 3 — Workforce diversity, equity, inclusion, and accessibility"
+    text: >
+      GOVERN 3: Workforce diversity, equity, inclusion, and accessibility processes are
+      prioritized in the mapping, measuring, and managing of AI risks throughout the
+      lifecycle. Subcategories: decision-making related to AI risks is informed by a
+      diverse team — diversity of demographics, disciplines, experience, expertise, and
+      backgrounds (3.1); and policies and procedures are in place to define and
+      differentiate roles and responsibilities for human-AI configurations and oversight of
+      AI systems (3.2).
+
+  - id: govern_4
+    section: "GOVERN 4 — Culture that considers and communicates AI risk"
+    text: >
+      GOVERN 4: Organizational teams are committed to a culture that considers and
+      communicates AI risk. Subcategories: organizational policies and practices foster a
+      critical thinking and safety-first mindset to minimize potential negative impacts
+      (4.1); organizational teams document the risks and potential impacts of the AI
+      technology they design, develop, deploy, evaluate, and use, and communicate about
+      impacts more broadly (4.2); and organizational practices are in place to enable AI
+      testing, identification of incidents, and information sharing (4.3).
+
+  - id: govern_5
+    section: "GOVERN 5 — Engagement with relevant AI actors"
+    text: >
+      GOVERN 5: Processes are in place for robust engagement with relevant AI actors.
+      Subcategories: organizational policies and practices are in place to collect,
+      consider, prioritize, and integrate feedback from those external to the team that
+      developed or deployed the AI system regarding potential individual and societal
+      impacts (5.1); and mechanisms are established to enable the team to regularly
+      incorporate adjudicated feedback from relevant AI actors into system design and
+      implementation (5.2).
+
+  - id: govern_6
+    section: "GOVERN 6 — Third-party software, data, and supply chain"
+    text: >
+      GOVERN 6: Policies and procedures are in place to address AI risks and benefits
+      arising from third-party software and data and other supply chain issues.
+      Subcategories: policies and procedures address AI risks associated with third-party
+      entities, including risks of infringement of a third party's intellectual property
+      or other rights (6.1); and contingency processes are in place to handle failures or
+      incidents in third-party data or AI systems deemed to be high-risk (6.2).
+
+  - id: map_function
+    section: "5.2 Map (function description)"
+    text: >
+      The MAP function establishes the context to frame risks related to an AI system.
+      The AI lifecycle consists of many interdependent activities involving a diverse set
+      of actors; AI actors in charge of one part of the process often do not have full
+      visibility or control over other parts and their associated contexts, which can make
+      it difficult to reliably anticipate impacts. The information gathered while carrying
+      out the MAP function enables negative risk prevention and informs decisions for
+      processes such as model management, as well as an initial decision about
+      appropriateness or need for an AI solution. Outcomes in MAP are the basis for the
+      MEASURE and MANAGE functions.
+
+  - id: map_1
+    section: "MAP 1 — Context is established and understood"
+    text: >
+      MAP 1: Context is established and understood. Subcategories: intended purposes,
+      potentially beneficial uses, context-specific laws, norms and expectations, and
+      prospective deployment settings are understood and documented (1.1); interdisciplinary
+      AI actors reflecting demographic diversity and broad domain expertise participate and
+      their participation is documented (1.2); the organization's mission and relevant
+      goals for AI technology are understood and documented (1.3); the business value or
+      context of business use is clearly defined (1.4); organizational risk tolerances are
+      determined and documented (1.5); and system requirements are elicited from and
+      understood by relevant AI actors, with design decisions taking socio-technical
+      implications into account (1.6).
+
+  - id: map_2
+    section: "MAP 2 — Categorization of the AI system"
+    text: >
+      MAP 2: Categorization of the AI system is performed. Subcategories: the specific
+      tasks and methods used to implement the tasks the AI system will support are defined,
+      e.g., classifiers, generative models, recommenders (2.1); information about the AI
+      system's knowledge limits and how system output may be utilized and overseen by
+      humans is documented (2.2); and scientific integrity and TEVV considerations are
+      identified and documented, including experimental design, data collection and
+      selection, system trustworthiness, and construct validation (2.3).
+
+  - id: map_3
+    section: "MAP 3 — AI capabilities, targeted usage, goals, benefits and costs"
+    text: >
+      MAP 3: AI capabilities, targeted usage, goals, and expected benefits and costs
+      compared with appropriate benchmarks are understood. Subcategories: potential
+      benefits of intended AI system functionality and performance are examined and
+      documented (3.1); potential costs, including non-monetary costs, from expected or
+      realized AI errors are examined and documented (3.2); targeted application scope is
+      specified and documented (3.3); processes for operator and practitioner proficiency
+      are defined, assessed, and documented (3.4); and processes for human oversight are
+      defined, assessed, and documented in accordance with GOVERN policies (3.5).
+
+  - id: map_4
+    section: "MAP 4 — Risks and benefits mapped for all components, including third-party"
+    text: >
+      MAP 4: Risks and benefits are mapped for all components of the AI system including
+      third-party software and data. Subcategories: approaches for mapping AI technology
+      and legal risks of its components — including use of third-party data or software —
+      are in place, followed, and documented, as are risks of infringement of a third
+      party's intellectual property (4.1); and internal risk controls for components of
+      the AI system, including third-party AI technologies, are identified and documented
+      (4.2).
+
+  - id: map_5
+    section: "MAP 5 — Impacts to individuals, groups, communities, organizations, and society"
+    text: >
+      MAP 5: Impacts to individuals, groups, communities, organizations, and society are
+      characterized. Subcategories: likelihood and magnitude of each identified impact,
+      both potentially beneficial and harmful, based on expected use, past uses of AI
+      systems in similar contexts, public incident reports, or other data are identified
+      and documented (5.1); and practices and personnel for supporting regular engagement
+      with relevant AI actors and integrating feedback about positive, negative, and
+      unanticipated impacts are in place and documented (5.2).
+
+  - id: measure_function
+    section: "5.3 Measure (function description)"
+    text: >
+      The MEASURE function employs quantitative, qualitative, or mixed-method tools,
+      techniques, and methodologies to analyze, assess, benchmark, and monitor AI risk and
+      related impacts. It uses knowledge relevant to AI risks identified in MAP and informs
+      MANAGE. AI systems should be tested before deployment and regularly while in
+      operation. Processes developed in MEASURE should include rigorous software testing
+      and performance assessment methodologies with associated measures of uncertainty,
+      comparisons to performance benchmarks, and formalized reporting and documentation of
+      results. Processes for independent review can improve the effectiveness of testing
+      and mitigate internal biases and potential conflicts of interest.
+
+  - id: measure_1
+    section: "MEASURE 1 — Appropriate methods and metrics are identified and applied"
+    text: >
+      MEASURE 1: Appropriate methods and metrics are identified and applied. Subcategories:
+      approaches and metrics for measurement of AI risks enumerated during MAP are selected
+      for implementation starting with the most significant AI risks, with risks that will
+      not or cannot be measured properly documented (1.1); appropriateness of AI metrics and
+      effectiveness of existing controls are regularly assessed and updated, including
+      reports of errors and potential impacts on affected communities (1.2); and internal
+      experts who did not serve as front-line developers, and/or independent assessors, are
+      involved in regular assessments and updates (1.3).
+
+  - id: measure_2
+    section: "MEASURE 2 — AI systems evaluated for trustworthy characteristics"
+    text: >
+      MEASURE 2: AI systems are evaluated for trustworthy characteristics. This is the
+      largest MEASURE category, with thirteen subcategories (2.1–2.13) covering: test sets,
+      metrics, and TEVV tool documentation; human-subject evaluation requirements; AI
+      system performance measured under conditions similar to deployment; monitoring of
+      functionality and behavior in production; demonstration of validity and reliability
+      with documented limitations of generalizability; regular safety evaluation with
+      documented residual risk; security and resilience evaluation; transparency and
+      accountability risk examination; explanation, validation, and documentation of the
+      model; privacy risk examination; fairness and bias evaluation; environmental impact
+      and sustainability assessment; and evaluation of the effectiveness of the MEASURE
+      function's own metrics and processes.
+
+  - id: measure_3
+    section: "MEASURE 3 — Mechanisms for tracking identified AI risks over time"
+    text: >
+      MEASURE 3: Mechanisms for tracking identified AI risks over time are in place.
+      Subcategories: approaches, personnel, and documentation are in place to regularly
+      identify and track existing, unanticipated, and emergent AI risks based on factors
+      such as intended and actual performance in deployed contexts (3.1); risk tracking
+      approaches are considered for settings where AI risks are difficult to assess using
+      currently available measurement techniques or where metrics are not yet available
+      (3.2); and feedback processes for end users and impacted communities to report
+      problems and appeal system outcomes are established and integrated into AI system
+      evaluation metrics (3.3).
+
+  - id: measure_4
+    section: "MEASURE 4 — Feedback about efficacy of measurement is gathered and assessed"
+    text: >
+      MEASURE 4: Feedback about efficacy of measurement is gathered and assessed.
+      Subcategories: measurement approaches for identifying AI risks are connected to
+      deployment context and informed through consultation with domain experts and other
+      end users (4.1); measurement results regarding AI system trustworthiness in
+      deployment contexts are informed by input from domain experts to validate whether the
+      system is performing consistently as intended (4.2); and measurable performance
+      improvements or declines based on consultations with relevant AI actors and field
+      data about context-relevant risks are identified and documented (4.3).
+
+  - id: manage_function
+    section: "5.4 Manage (function description)"
+    text: >
+      The MANAGE function entails allocating risk resources to mapped and measured risks
+      on a regular basis and as defined by the GOVERN function. Risk treatment comprises
+      plans to respond to, recover from, and communicate about incidents or events.
+      Contextual information gleaned from expert consultation and input from relevant AI
+      actors is utilized in this function to decrease the likelihood of system failures and
+      negative impacts. After completing MANAGE, plans for prioritizing risk and regular
+      monitoring and improvement will be in place.
+
+  - id: manage_1
+    section: "MANAGE 1 — AI risks are prioritized, responded to, and managed"
+    text: >
+      MANAGE 1: AI risks based on assessments and other analytical output from the MAP and
+      MEASURE functions are prioritized, responded to, and managed. Subcategories: a
+      determination is made as to whether the AI system achieves its intended purposes and
+      stated objectives and whether development or deployment should proceed (1.1);
+      treatment of documented AI risks is prioritized based on impact, likelihood, and
+      available resources or methods (1.2); responses to AI risks deemed high priority are
+      developed, planned, and documented — risk response options can include mitigating,
+      transferring, avoiding, or accepting (1.3); and negative residual risks to both
+      downstream acquirers and end users are documented (1.4).
+
+  - id: manage_2
+    section: "MANAGE 2 — Strategies to maximize AI benefits and minimize negative impacts"
+    text: >
+      MANAGE 2: Strategies to maximize AI benefits and minimize negative impacts are
+      planned, prepared, implemented, documented, and informed by input from relevant AI
+      actors. Subcategories: resources required to manage AI risks are taken into account,
+      along with viable non-AI alternative approaches, to reduce the magnitude or
+      likelihood of potential impacts (2.1); mechanisms are in place and applied to sustain
+      the value of deployed AI systems (2.2); procedures are followed to respond to and
+      recover from a previously unknown risk when identified (2.3); and mechanisms are in
+      place to supersede, disengage, or deactivate AI systems that demonstrate performance
+      or outcomes inconsistent with intended use (2.4).
+
+  - id: manage_3
+    section: "MANAGE 3 — AI risks and benefits from third-party entities are managed"
+    text: >
+      MANAGE 3: AI risks and benefits from third-party entities are managed. Subcategories:
+      AI risks and benefits from third-party resources are regularly monitored, and risk
+      controls are applied and documented (3.1); and pre-trained models which are used for
+      development are monitored as part of AI system regular monitoring and maintenance
+      (3.2).
+
+  - id: manage_4
+    section: "MANAGE 4 — Risk treatments, response, recovery, and communication plans"
+    text: >
+      MANAGE 4: Risk treatments, including response and recovery, and communication plans
+      for the identified and measured AI risks are documented and monitored regularly.
+      Subcategories: post-deployment AI system monitoring plans are implemented, including
+      mechanisms for capturing input from users, appeal and override, decommissioning,
+      incident response, recovery, and change management (4.1); measurable activities for
+      continual improvements are integrated into AI system updates with regular engagement
+      with interested parties (4.2); and incidents and errors are communicated to relevant
+      AI actors, including affected communities, with documented processes for tracking,
+      responding to, and recovering from incidents (4.3).
+
+  - id: profiles
+    section: "6. AI RMF Profiles"
+    text: >
+      AI RMF use-case profiles are implementations of the AI RMF functions, categories,
+      and subcategories for a specific setting or application based on the requirements,
+      risk tolerance, and resources of the Framework user — for example, an AI RMF hiring
+      profile or an AI RMF fair housing profile. AI RMF temporal profiles describe either
+      the current state or the desired target state of specific AI risk management
+      activities. Comparing Current and Target Profiles likely reveals gaps to be addressed
+      to meet AI risk management objectives. AI RMF cross-sectoral profiles cover risks of
+      models or applications that can be used across use cases or sectors, such as the use
+      of large language models, cloud-based services, or acquisition. This Framework does
+      not prescribe profile templates, allowing for flexibility in implementation.
+
+  - id: appendixA_design_dev
+    section: "Appendix A — AI Design and AI Development actor tasks"
+    text: >
+      AI Design tasks are performed during the Application Context and Data and Input
+      phases of the AI lifecycle. AI Design actors create the concept and objectives of AI
+      systems and are responsible for planning, design, and data collection and processing
+      tasks. AI actors in this category include data scientists, domain experts,
+      socio-cultural analysts, human factors experts, governance experts, data engineers,
+      data providers, system funders, product managers, and legal and privacy governance.
+      AI Development tasks are performed during the AI Model phase. AI Development actors
+      provide the initial infrastructure of AI systems and are responsible for model
+      building and interpretation tasks — creation, selection, calibration, training, and
+      testing of models or algorithms. AI actors in this category include machine learning
+      experts, data scientists, developers, and legal and privacy governance experts.
+
+  - id: appendixA_deployment_operation
+    section: "Appendix A — AI Deployment and Operation/Monitoring actor tasks"
+    text: >
+      AI Deployment tasks are performed during the Task and Output phase of the lifecycle.
+      AI Deployment actors are responsible for contextual decisions relating to how the AI
+      system is used to assure deployment into production — piloting the system, checking
+      compatibility with legacy systems, ensuring regulatory compliance, managing
+      organizational change, and evaluating user experience. Operation and Monitoring tasks
+      are carried out by AI actors responsible for operating the AI system and working with
+      others to regularly assess system output and impacts, including system operators,
+      domain experts, evaluators and auditors, compliance experts, and organizational
+      management.
+
+  - id: appendixA_tevv
+    section: "Appendix A — Test, Evaluation, Verification, and Validation (TEVV) tasks"
+    text: >
+      TEVV tasks are performed throughout the AI lifecycle, carried out by AI actors who
+      examine the AI system or its components, or detect and remediate problems. Ideally,
+      AI actors carrying out verification and validation tasks are distinct from those who
+      perform test and evaluation actions. TEVV tasks for design and planning center on
+      internal and external validation of assumptions for system design and data
+      collection. TEVV tasks for development include model validation and assessment. TEVV
+      tasks for deployment include system validation and integration in production, with
+      testing and recalibration for compliance with existing legal, regulatory, and ethical
+      specifications. TEVV tasks for operations involve ongoing monitoring, periodic
+      updates, subject matter expert recalibration, and tracking of incidents or errors.
+
+  - id: appendixA_human_domain
+    section: "Appendix A — Human Factors and Domain Expert tasks"
+    text: >
+      Human Factors tasks and activities are found throughout the dimensions of the AI
+      lifecycle, including human-centered design practices, promoting active involvement of
+      end users, incorporating context-specific norms and values in system design, and
+      broad integration of humans and human dynamics in all phases. Domain Expert tasks
+      involve input from multidisciplinary practitioners or scholars who provide knowledge
+      or expertise in an industry sector, economic sector, context, or application area
+      where an AI system is being used, providing essential guidance for AI system design
+      and interpreting outputs in support of TEVV and impact assessment teams.
+
+  - id: appendixA_governance_procurement
+    section: "Appendix A — Governance and Oversight, Procurement tasks"
+    text: >
+      Governance and Oversight tasks are assumed by AI actors with management, fiduciary,
+      and legal authority and responsibility for the organization in which an AI system is
+      designed, developed, and/or deployed. Key AI actors responsible for AI governance
+      include organizational management, senior leadership, and the Board of Directors —
+      parties concerned with the impact and sustainability of the organization as a whole.
+      Procurement tasks are conducted by AI actors with financial, legal, or policy
+      management authority for acquisition of AI models, products, or services from a
+      third-party developer, vendor, or contractor.
+
+  - id: appendixA_thirdparty_endusers
+    section: "Appendix A — Third-party entities, end users, and affected individuals"
+    text: >
+      Third-party entities include providers, developers, vendors, and evaluators of data,
+      algorithms, models, and/or systems and related services for another organization or
+      the organization's customers or clients; by definition, they are external to the
+      design, development, or deployment team of the acquiring organization. End users of
+      an AI system are the individuals or groups that use the system for specific purposes,
+      ranging in competency from AI experts to first-time technology users. Affected
+      individuals/communities encompass all individuals, groups, communities, or
+      organizations directly or indirectly affected by AI systems or decisions based on
+      their output, who do not necessarily interact with the deployed system directly.
+
+  - id: appendixB
+    section: "Appendix B — How AI Risks Differ from Traditional Software Risks"
+    text: >
+      Compared to traditional software, AI-specific risks that are new or increased
+      include: the data used for building an AI system may not be a true or appropriate
+      representation of the context or intended use, and harmful bias and data quality
+      issues can affect trustworthiness; AI system dependency and reliance on data for
+      training, combined with increased volume and complexity; intentional or unintentional
+      changes during training may fundamentally alter performance; datasets may become
+      detached from their original context or become stale relative to the deployment
+      context; AI system scale and complexity (many systems contain billions or even
+      trillions of decision points); higher difficulty predicting failure modes for
+      emergent properties of large-scale pre-trained models; privacy risk due to enhanced
+      data aggregation capability; more frequent maintenance needs due to data, model, or
+      concept drift; increased opacity and concerns about reproducibility; and
+      underdeveloped software testing standards for AI-based practices.
+
+  - id: appendixC
+    section: "Appendix C — AI Risk Management and Human-AI Interaction"
+    text: >
+      Organizations that design, develop, or deploy AI systems for operational settings may
+      enhance their AI risk management by understanding current limitations of human-AI
+      interaction. Issues meriting further consideration include: human roles and
+      responsibilities in decision making and overseeing AI systems need to be clearly
+      defined and differentiated, since human-AI configurations can span from fully
+      autonomous to fully manual; decisions in the design, development, deployment,
+      evaluation, and use of AI systems reflect systemic and human cognitive biases;
+      human-AI interaction results vary — under certain conditions the AI part of a
+      human-AI interaction can amplify human biases, leading to more biased decisions than
+      the AI or human alone, though when judiciously organized they can result in
+      complementarity and improved overall performance; and presenting AI system
+      information to humans is complex, since humans perceive and derive meaning from AI
+      system output and explanations in different ways.
+
+  - id: appendixD
+    section: "Appendix D — Attributes of the AI RMF"
+    text: >
+      The AI RMF strives to: be risk-based, resource-efficient, pro-innovation, and
+      voluntary; be consensus-driven and developed through an open, transparent process;
+      use clear and plain language understandable by a broad audience while retaining
+      sufficient technical depth for practitioners; provide common language and
+      understanding — taxonomy, terminology, definitions, metrics, and characterizations —
+      to manage AI risks; be easily usable and fit well with other aspects of risk
+      management; be useful to a wide range of perspectives, sectors, and technology
+      domains; be outcome-focused and non-prescriptive, providing a catalog of outcomes
+      rather than one-size-fits-all requirements; take advantage of and foster greater
+      awareness of existing standards and best practices; be law- and regulation-agnostic;
+      and be a living document, readily updated as technology and understanding evolve.

@@ -1,0 +1,129 @@
+# 30 labeled queries over corpus/nist_ai_rmf.yaml.
+# Each query's relevant_chunk_ids names the chunk(s) that correctly answer it —
+# this is the ground truth for recall@k / precision@k / MRR / NDCG.
+#
+# Mix of query styles on purpose: some reuse exact terminology from the source
+# text (TEVV, PETs, residual risk) where lexical search should do well; others
+# paraphrase away from the source wording, to test whether a purely lexical
+# baseline misses what a semantic one would catch.
+
+queries:
+  - id: q01
+    query: "What are the three major categories of AI bias?"
+    relevant_chunk_ids: [fair_bias]
+
+  - id: q02
+    query: "How does the framework define risk tolerance?"
+    relevant_chunk_ids: [risk_tolerance]
+
+  - id: q03
+    query: "What happens to risk that's left over after you've tried to mitigate it?"
+    relevant_chunk_ids: [risk_prioritization]
+
+  - id: q04
+    query: "What does TEVV stand for and when does it happen in the AI lifecycle?"
+    relevant_chunk_ids: [appendixA_tevv]
+
+  - id: q05
+    query: "What are the four functions of the AI RMF Core?"
+    relevant_chunk_ids: [core_intro]
+
+  - id: q06
+    query: "Which subcategories fall under GOVERN 1?"
+    relevant_chunk_ids: [govern_1]
+
+  - id: q07
+    query: "What accountability structures does GOVERN 2 require?"
+    relevant_chunk_ids: [govern_2]
+
+  - id: q08
+    query: "How does the framework address workforce diversity in AI risk decisions?"
+    relevant_chunk_ids: [govern_3]
+
+  - id: q09
+    query: "What does the framework say about risk from vendors and supply chains?"
+    relevant_chunk_ids: [govern_6]
+
+  - id: q10
+    query: "What is the point of establishing context before assessing AI risk?"
+    relevant_chunk_ids: [map_function]
+
+  - id: q11
+    query: "What subcategories are under MAP 1 context establishment?"
+    relevant_chunk_ids: [map_1]
+
+  - id: q12
+    query: "How does the framework categorize an AI system?"
+    relevant_chunk_ids: [map_2]
+
+  - id: q13
+    query: "What does MAP 5 say about characterizing impacts on society?"
+    relevant_chunk_ids: [map_5]
+
+  - id: q14
+    query: "What tools and methodologies does the MEASURE function use?"
+    relevant_chunk_ids: [measure_function]
+
+  - id: q15
+    query: "What subcategories fall under MEASURE 2 trustworthy characteristics evaluation?"
+    relevant_chunk_ids: [measure_2]
+
+  - id: q16
+    query: "How does the framework track AI risks over time?"
+    relevant_chunk_ids: [measure_3]
+
+  - id: q17
+    query: "What does the MANAGE function entail?"
+    relevant_chunk_ids: [manage_function]
+
+  - id: q18
+    query: "What are the risk response options under MANAGE 1 — can you transfer or avoid risk?"
+    relevant_chunk_ids: [manage_1]
+
+  - id: q19
+    query: "How are pre-trained models monitored according to MANAGE 3?"
+    relevant_chunk_ids: [manage_3]
+
+  - id: q20
+    query: "What is the difference between explainability and interpretability?"
+    relevant_chunk_ids: [explainable_interpretable]
+
+  - id: q21
+    query: "What are privacy-enhancing technologies (PETs)?"
+    relevant_chunk_ids: [privacy_enhanced]
+
+  - id: q22
+    query: "What does it mean for an AI system not to cause harm to people or property?"
+    relevant_chunk_ids: [safe]
+
+  - id: q23
+    query: "What distinguishes security from resilience in an AI system?"
+    relevant_chunk_ids: [secure_resilient]
+
+  - id: q24
+    query: "Why is transparency necessary for accountability?"
+    relevant_chunk_ids: [accountable_transparent]
+
+  - id: q25
+    query: "What is the difference between accuracy and robustness?"
+    relevant_chunk_ids: [valid_reliable]
+
+  - id: q26
+    query: "Who is the intended audience of the AI RMF?"
+    relevant_chunk_ids: [audience]
+
+  - id: q27
+    query: "What are AI RMF use-case profiles?"
+    relevant_chunk_ids: [profiles]
+
+  - id: q28
+    query: "Can an AI system make a human's existing biases worse instead of better?"
+    relevant_chunk_ids: [appendixC]
+
+  - id: q29
+    query: "What risks does the framework say are new or increased compared to traditional software?"
+    relevant_chunk_ids: [appendixB]
+
+  - id: q30
+    query: "What are the ten attributes the AI RMF strives to embody?"
+    relevant_chunk_ids: [appendixD]

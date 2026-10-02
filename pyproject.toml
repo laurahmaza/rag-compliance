@@ -1,0 +1,24 @@
+[project]
+name = "rag-compliance"
+version = "0.1.0"
+description = "Hybrid-retrieval RAG pipeline over regulatory text (NIST AI RMF 1.0), with recall@k/precision@k/MRR/NDCG evaluation against a 30-query labeled set."
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "pyyaml>=6.0",
+    "rank-bm25>=0.2.2",
+]
+
+[project.optional-dependencies]
+model = ["sentence-transformers>=2.2"]
+dev = ["pytest>=7.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["rag_compliance*"]
