@@ -1,0 +1,22 @@
+# Sample questions for the agent CLI demo and the Colab --brain openai run.
+# Unlike cases/queries.yaml (retrieval ground truth), these have no labeled
+# answer — the point is to inspect the agent's trace, citations, and cost,
+# not to score it against a fixed key.
+
+questions:
+  - id: aq01
+    question: "What is residual risk, and which MANAGE subcategory requires documenting it?"
+  - id: aq02
+    question: "What does GOVERN 6 require about third-party software risk?"
+  - id: aq03
+    question: "What's the difference between explainability and interpretability?"
+  - id: aq04
+    question: "What subcategories fall under MAP 1?"
+  - id: aq05
+    question: "Does the AI RMF require a specific risk tolerance threshold?"
+  - id: aq06
+    question: "What does the framework say about environmental impact of AI training?"
+  - id: aq07
+    question: "What is the capital of France?"  # intentionally off-topic — tests graceful "can't answer" behavior
+  - id: aq08
+    question: "What are the three categories of AI bias NIST identifies?"

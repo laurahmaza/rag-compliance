@@ -10,12 +10,16 @@ import argparse
 import json
 from pathlib import Path
 
+from .agent import AgentConfig, run_agent
+from .brain import AdaptiveFakeBrain, OpenAIBrain
 from .corpus import load_corpus
 from .embeddings import FakeEmbedder, SentenceTransformerEmbedder
 from .eval import evaluate_retriever, load_queries
 from .hybrid import reciprocal_rank_fusion
 from .index import BM25Index, DenseIndex
 from .plotting import plot_recall_comparison
+from .tools import GetChunkTool, ListSectionsTool, RetrieveTool
+from .trace import save_trace
 
 
 def _build_embedder(name: str):
@@ -107,6 +111,109 @@ def cmd_evaluate(args: argparse.Namespace) -> None:
         print(f"saved plot -> {plot_path}")
 
 
+def _tools_schema() -> list[dict]:
+    return [
+        {
+            "type": "function",
+            "function": {
+                "name": "retrieve",
+                "description": "Search the NIST AI RMF corpus for relevant chunks.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {"query": {"type": "string"}},
+                    "required": ["query"],
+                },
+            },
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "get_chunk",
+                "description": "Fetch the full text of one chunk by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {"chunk_id": {"type": "string"}},
+                    "required": ["chunk_id"],
+                },
+            },
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "list_sections",
+                "description": "List every chunk id and section title in the corpus.",
+                "parameters": {"type": "object", "properties": {}},
+            },
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "final_answer",
+                "description": "Give the final answer with citations.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "text": {"type": "string"},
+                        "citations": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "chunk_id": {"type": "string"},
+                                    "claim": {"type": "string"},
+                                },
+                                "required": ["chunk_id", "claim"],
+                            },
+                        },
+                    },
+                    "required": ["text", "citations"],
+                },
+            },
+        },
+    ]
+
+
+def cmd_agent(args: argparse.Namespace) -> None:
+    chunks = load_corpus(args.corpus)
+    bm25 = BM25Index(chunks)
+    dense = None
+    if args.embedder:
+        dense = DenseIndex(chunks, _build_embedder(args.embedder))
+
+    tools = {
+        "retrieve": RetrieveTool(bm25, dense),
+        "get_chunk": GetChunkTool(chunks),
+        "list_sections": ListSectionsTool(chunks),
+    }
+
+    if args.brain == "fake":
+        brain = AdaptiveFakeBrain()
+    else:
+        brain = OpenAIBrain(tools_schema=_tools_schema())
+
+    result = run_agent(args.question, brain, tools, chunks, AgentConfig(max_steps=args.max_steps))
+
+    print(f"\nquestion: {args.question!r}")
+    print(f"status: {result.status}\n")
+    if result.answer_text:
+        print(f"answer: {result.answer_text}\n")
+    if result.citation_checks:
+        print("citations:")
+        for c in result.citation_checks:
+            flag = "OK" if c.grounded and c.exists_in_corpus else "UNGROUNDED"
+            print(f"  [{flag}] {c.chunk_id}: {c.claim!r} (word_overlap={c.word_overlap:.2f})")
+    print(
+        f"\ncost: {result.cost.total_tokens_in} in / {result.cost.total_tokens_out} out tokens, "
+        f"~${result.cost.estimated_cost_usd:.5f}, {result.cost.total_latency_s:.3f}s"
+    )
+
+    if args.trace_dir:
+        safe_name = "".join(ch if ch.isalnum() else "_" for ch in args.question[:40])
+        path = Path(args.trace_dir) / f"{safe_name}.jsonl"
+        save_trace(result, path)
+        print(f"\nsaved trace -> {path}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="rag_compliance")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -127,6 +234,15 @@ def main() -> None:
     p_eval.add_argument("--output", default=None)
     p_eval.add_argument("--plot", default=None, help="path to save a recall@k bar chart PNG")
     p_eval.set_defaults(func=cmd_evaluate)
+
+    p_agent = sub.add_parser("agent", help="run the citation-verifying agent on one question")
+    p_agent.add_argument("--question", required=True)
+    p_agent.add_argument("--corpus", default="corpus/nist_ai_rmf.yaml")
+    p_agent.add_argument("--brain", default="fake", choices=["fake", "openai"])
+    p_agent.add_argument("--embedder", default=None, help="omit for BM25-only retrieval; 'fake' or an HF model id to enable hybrid")
+    p_agent.add_argument("--max-steps", type=int, default=6)
+    p_agent.add_argument("--trace-dir", default="results/traces")
+    p_agent.set_defaults(func=cmd_agent)
 
     args = parser.parse_args()
     args.func(args)

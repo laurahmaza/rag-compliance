@@ -1,148 +1,221 @@
 # rag-compliance
 
-A hybrid-retrieval RAG pipeline over regulatory text — built and evaluated
-against the real NIST AI RMF 1.0, not a toy corpus.
+A hybrid-retrieval RAG pipeline over regulatory text, plus a citation-
+verifying agent — built and evaluated against the real NIST AI RMF 1.0,
+not a toy corpus.
 
 ## The question
 
-> Given a question about AI governance obligations, can the system retrieve
-> the exact framework section that answers it — and does combining lexical
-> search (BM25) with semantic search (dense embeddings) actually help?
+> Given a question about AI governance obligations, can the system
+> retrieve the exact framework section that answers it, and can an agent
+> answer with citations that are actually checked against what it
+> retrieved — not just trusted?
 
 ## The graph
 
 ![Recall@10 by retriever](docs/recall_comparison.png)
 
-*(Real numbers: BM25 is deterministic and model-free; dense and hybrid use
-`all-MiniLM-L6-v2` via sentence-transformers, run in Colab.)*
+*(BM25 numbers below are real, current, and reflect a bug fix described
+under Limitations. Dense/hybrid numbers need a fresh Colab run against the
+fixed BM25 — see "Running for real.")*
 
-## The finding
+## The retrieval finding (Week 3)
 
-Run against the real corpus (30 labeled queries, `k=10`), with a real
-embedding model:
+Run against the real corpus (30 labeled queries, `k=10`):
 
 | retriever | recall@10 | precision@10 | MRR | NDCG@10 |
 |---|---|---|---|---|
-| BM25 | 0.900 | 0.090 | 0.717 | 0.762 |
-| Dense (`all-MiniLM-L6-v2`) | 0.933 | 0.093 | 0.838 | 0.862 |
-| Hybrid (RRF) | **0.967** | 0.097 | 0.821 | 0.857 |
+| BM25 | 0.867 | 0.087 | 0.766 | 0.791 |
+| Dense (placeholder embedder) | 0.200 | 0.020 | 0.084 | 0.112 |
+| Hybrid (RRF, placeholder dense) | 0.633 | 0.063 | 0.242 | 0.336 |
 
-With a real embedding model, dense retrieval beats BM25 on every metric,
-and hybrid search pushes recall@10 to 0.967 — the highest of the three.
-This reverses what an earlier run with a placeholder (non-semantic)
-embedder suggested: there, hybrid underperformed BM25 alone (0.633 vs
-0.900), because fusing a strong lexical signal with pure noise diluted it.
-The lesson held in both directions — a noisy dense signal makes hybrid
-*worse* than its best component; a real one makes hybrid the *best*
-retriever of the three. Hybrid isn't inherently better or worse than
-either single method; it inherits the quality of its weakest input.
-
-MRR tells a complementary story: dense (0.838) and hybrid (0.821) both
-beat BM25 (0.717) by a wide margin, meaning the correct chunk isn't just
-present in the top 10 more often — it's closer to rank 1. For a
-retrieval-augmented system, that matters beyond recall alone: a correct
-chunk buried at rank 9 costs more context budget and more reranking work
-than one sitting at rank 1.
+BM25 alone retrieves the correct section 87% of the time at k=10, with
+correct chunks ranking close to the top (MRR 0.766). Recall dropped
+slightly from an earlier 0.900 after adding stopword filtering (see
+Limitations) — a small, deliberate tradeoff: a few queries had been
+benefiting from incidental stopword overlap, and removing that made
+retrieval more honest at the cost of a few points of recall. A real
+embedding model (`all-MiniLM-L6-v2`) previously pushed dense to 0.933 and
+hybrid to 0.967 recall@10 — but that run predates both the BM25Plus fix
+and the stopword fix (see Limitations) and needs to be reproduced against
+current code before those numbers can be cited again. That re-run is the
+immediate next step, not yet done as of this commit.
 
 ## Why this matters for the precision@10 numbers
 
-Precision@10 looks low across the board (~0.09–0.10) — this is a
-k-vs-corpus-size artifact, not a retrieval failure: most queries in this
-set have exactly **one** correct chunk, so precision@10 is capped at 0.10
-even for a perfect retriever. Recall, MRR, and NDCG are the metrics that
-actually diagnose retrieval quality here.
+Precision@10 looks low across the board — this is a k-vs-corpus-size
+artifact: most queries have exactly **one** correct chunk, so precision@10
+is capped at 0.10 even for a perfect retriever. Recall, MRR, and NDCG are
+the metrics that actually diagnose retrieval quality here.
 
-## Why this domain
+## The agent (Week 4)
 
-Regulatory and legal text is exactly where retrieval quality can be
-judged better than an average engineer could judge it — citing the wrong
-GOVERN subcategory in a compliance answer isn't a stylistic miss, it's an
-incorrect claim about what the framework requires.
+A tool-using agent that answers a compliance question by retrieving NIST
+AI RMF sections, then produces an answer with **verifiable citations**:
+every claim must point at a chunk id the agent actually retrieved during
+that run, checked programmatically — not trusted because the model said so.
 
-## Quickstart (BM25 is real right now — no GPU, no download)
+```bash
+python -m rag_compliance.cli agent --question "What is residual risk?" --brain fake
+```
+
+### Tools available to the agent
+- `retrieve(query)` — hybrid/BM25 search over the corpus (reuses `index.py`/`hybrid.py`)
+- `get_chunk(chunk_id)` — full text of one specific chunk
+- `list_sections()` — every chunk id + section title, for when the agent needs to orient itself rather than guess an id
+
+### Five ways the agent can fail, and what the code does about each
+
+1. **Tool hallucination** — the brain requests a tool name that isn't
+   registered. Caught, logged as an error step in the trace, does not
+   crash; the agent gets another chance, up to `max_tool_errors` (then
+   aborts with `too_many_tool_errors`).
+2. **Step budget exceeded** — the agent takes too many steps without
+   reaching a final answer. The loop stops at `max_steps` and returns
+   `step_budget_exceeded` with whatever partial trace exists, rather than
+   looping forever.
+3. **Malformed structured output** — the brain's response doesn't parse
+   into a valid action. The parser error is fed back as a synthetic
+   message for one retry; a second consecutive failure aborts with
+   `invalid_output`.
+4. **Citation hallucination** — the final answer cites a chunk id that was
+   never returned by any tool call during that run. `citations.py` checks
+   every citation against the trace's actually-retrieved ids and flags
+   ungrounded ones explicitly in the result.
+5. **Empty retrieval** — a query matches nothing in the corpus. The
+   `retrieve` tool returns an explicit empty result rather than raising,
+   so the agent can report "I don't have information on this" instead of
+   fabricating an answer. Real example, found by actually testing an
+   off-topic question rather than assuming the happy path:
+
+   ```
+   $ python -m rag_compliance.cli agent --question "What is the capital of France?" --brain fake
+   answer: I don't have information on this in the NIST AI RMF.
+   ```
+
+   This only works correctly because of a second bug fix below — without
+   it, the agent confidently "answered" this question by citing a random
+   chunk.
+
+All five are covered by dedicated tests in `tests/test_agent.py`, run
+against `FakeBrain` — a scripted, deterministic brain that can be told to
+produce exactly these failures on demand, which a real model rarely does
+reliably when you actually want to test for it.
+
+### Cost and traces
+
+Every agent run logs a per-step token count and dollar estimate
+(`agent.py`'s `CostSummary`), and persists a full JSONL trace — one line
+per step — to `results/traces/`, so a failure can be debugged after the
+fact instead of only at the moment it happened.
+
+## Quickstart (BM25 and the agent's FakeBrain path are real right now)
 
 ```bash
 pip install -e ".[dev]"
-pytest                                            # 32 tests, no model needed
+pytest                                            # 52 tests, no model needed
 
-# Single query against real BM25
+# Retrieval
 python -m rag_compliance.cli query --text "What is residual risk?" --retriever bm25
-
-# Full evaluation with a placeholder embedder (dense/hybrid numbers are illustrative only)
 python -m rag_compliance.cli evaluate --embedder fake --k 10
+
+# Agent (deterministic fake brain — proves the loop, not model quality)
+python -m rag_compliance.cli agent --question "What does GOVERN 6 require?" --brain fake
 ```
 
-## Running for real (Google Colab, free GPU or CPU)
+## Running for real (Google Colab)
+
+Retrieval with a real embedding model:
 
 ```python
 !git clone https://github.com/laurahmaza/rag-compliance.git
 %cd rag-compliance
 !pip install -e ".[model]" -q
-```
-
-```python
 !python -m rag_compliance.cli evaluate --embedder all-MiniLM-L6-v2 --k 10 \
     --output results/eval_report_real.json --plot docs/recall_comparison.png
 ```
 
-`all-MiniLM-L6-v2` is a small, fast sentence-transformers model — runs
-fine on Colab's free CPU tier, no GPU strictly required.
+The agent with a real LLM:
+
+```python
+import os
+os.environ["OPENAI_API_KEY"] = "sk-..."
+!pip install -e ".[openai]" -q
+!python -m rag_compliance.cli agent --question "What does GOVERN 6 require about third-party risk?" --brain openai
+```
 
 ## Architecture
 
-corpus.py Chunk dataclass + YAML loader (structure-based chunking,
-not fixed token count)
-embeddings.py Embedder protocol: FakeEmbedder (deterministic,
-dependency-free) and SentenceTransformerEmbedder (real,
-lazy-imported)
-index.py DenseIndex (numpy cosine similarity) and BM25Index
-(rank_bm25 — real, no model needed)
-hybrid.py Reciprocal rank fusion, combining two ranked lists by
-rank position rather than incomparable raw scores
-metrics.py recall@k, precision@k, MRR, NDCG@k — pure math,
-measured independently of generation
-eval.py Orchestration: run the labeled query set through a
-retriever, aggregate to summary statistics
-plotting.py Recall@k bar chart comparing retrievers
-cli.py query and evaluate subcommands
-
+```
+corpus.py        Chunk dataclass + YAML loader (structure-based chunking)
+embeddings.py     Embedder protocol: FakeEmbedder (deterministic) and
+                  SentenceTransformerEmbedder (real, lazy-imported)
+index.py          DenseIndex (numpy cosine similarity) and BM25Index
+                  (rank_bm25's BM25Plus — see Limitations for why Plus,
+                  not Okapi)
+hybrid.py         Reciprocal rank fusion
+metrics.py        recall@k, precision@k, MRR, NDCG@k
+eval.py           Retrieval evaluation orchestration
+plotting.py       Recall@k bar chart
+tools.py          Agent tools: retrieve, get_chunk, list_sections
+brain.py          Brain protocol: FakeBrain (scripted, for failure-mode
+                  tests), AdaptiveFakeBrain (reactive, for the CLI demo),
+                  OpenAIBrain (real, function-calling, lazy-imported)
+citations.py      Programmatic citation verification — grounding, not truth
+agent.py          The agent loop and its five explicit failure handlers
+trace.py          JSONL trace persistence
+cli.py            `query`, `evaluate`, and `agent` subcommands
+```
 
 ## The corpus
 
 `corpus/nist_ai_rmf.yaml` — 50 chunks from NIST AI 100-1 (AI RMF 1.0),
-chunked by document structure: one chunk per subsection, or one chunk per
-GOVERN/MAP/MEASURE/MANAGE category with its subcategories. This is a U.S.
-government publication and is in the public domain (17 U.S.C. § 105) — no
-licensing concern in using the full text.
+chunked by document structure. U.S. government publication, public domain
+(17 U.S.C. § 105).
 
-## The 30 labeled queries
+## The 30 labeled retrieval queries
 
-`cases/queries.yaml` — a deliberate mix: some queries reuse exact
-framework terminology (TEVV, PETs, residual risk) where lexical search
-has every advantage; others paraphrase away from the source wording
-entirely, to test semantic matching.
+`cases/queries.yaml` — a mix of exact-terminology and paraphrased queries
+against the corpus, for recall@k/MRR evaluation.
 
 ## Limitations
 
-- **30 queries, mostly one relevant chunk each.** This demonstrates the
-  evaluation mechanism and produced real findings, but a broader claim
-  about retrieval quality on regulatory text would need more queries,
-  including queries with multiple correct chunks.
-- **No reranking stage.** The curriculum's two-stage "retrieve broad,
-  rerank fine" pattern with a cross-encoder isn't implemented here —
-  retrieval is single-stage (BM25, dense, or RRF-fused).
-- **BM25's strong numbers partly reflect query design.** Several queries
-  reuse the framework's own section-heading vocabulary (e.g., "GOVERN 1",
-  "MAP 5"), which lexical search is especially well-suited to match. A
-  harder, fully paraphrased query set would likely widen dense's
-  advantage over BM25 further.
-- **No citation-verification layer.** This repo measures whether the
-  *right chunk* is retrieved — it doesn't yet verify that a generated
-  answer's claims are actually supported by the chunk it cites (that's
-  Week 4 material: forcing citation by span and verifying programmatically
-  that the cited text supports the claim).
-- **Single embedding model tested.** `all-MiniLM-L6-v2` is small and fast;
-  a larger model might shift the dense/hybrid numbers further.
+- **Bug found and fixed: `BM25Okapi` → `BM25Plus`.** Classic Okapi BM25's
+  IDF term is exactly zero whenever a query term appears in precisely half
+  the corpus — not negative (which `rank_bm25`'s `epsilon` parameter
+  corrects), just silently zero, dropping a real textual match's score to
+  nothing. Found via a failing agent test on a 2-document fixture, not a
+  theoretical concern — `BM25Plus` avoids it by construction. BM25 recall
+  stayed flat and MRR improved (0.717 → 0.755) after this specific fix,
+  before the stopword fix below was applied on top of it.
+- **Bug found and fixed: no stopword filtering in BM25.** Without it, a
+  completely off-topic query like "What is the capital of France?" still
+  scored a confident-looking top hit against some chunk — purely from
+  sharing words like "what", "is", "the". The agent would then cite that
+  chunk as if it answered the question. Found by actually running the
+  agent on an off-topic question, not by anticipating the edge case.
+  Adding a minimal stopword list fixed it (the off-topic query now
+  correctly returns zero matches) at a measured cost of ~3 points of BM25
+  recall@10 on the 30-query set — a few queries had been benefiting from
+  incidental stopword overlap with their correct chunk.
+- **Dense/hybrid retrieval numbers need re-validation.** The 0.933/0.967
+  recall figures from an earlier Colab run used the old `BM25Okapi` and
+  pre-stopword-filtering tokenizer for the BM25 half of hybrid fusion —
+  they need to be reproduced against current code before being cited
+  again.
+- **Citation verification checks grounding, not truth.** `citations.py`
+  confirms a cited chunk id was actually retrieved during the run — it
+  does not verify the claim is semantically entailed by the chunk's text
+  (that needs an NLI-style check, not implemented here).
+- **`FakeBrain` scripts are hand-written per test scenario**, not a
+  general-purpose simulated LLM. They prove the agent loop's control flow
+  is correct, not that a real model would behave this way — that needs
+  the `--brain openai` run.
+- **No reranking stage.** Retrieval is single-stage (BM25, dense, or
+  RRF-fused) — no cross-encoder reranker.
+- **30 retrieval queries, mostly one relevant chunk each**; a broader
+  claim about retrieval quality would need more queries, including
+  multi-answer ones.
 
 ## Tests
 
@@ -150,7 +223,8 @@ entirely, to test semantic matching.
 pytest -v
 ```
 
-32 tests covering metrics math, corpus/query loading, both indexes, and
-RRF fusion — all run against `FakeEmbedder` or fixed fake retrievers, so
-no API key, GPU, or model download is required to verify the logic is
-correct.
+52 tests: retrieval metrics, corpus/query loading, both indexes, RRF
+fusion, agent tools, citation verification, trace persistence, and — the
+core of Week 4 — all five agent failure modes, each proven with a
+dedicated test against `FakeBrain`. No API key, GPU, or model download
+required.

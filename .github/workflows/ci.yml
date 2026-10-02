@@ -18,3 +18,5 @@ jobs:
         run: pytest -v
       - name: Real BM25 evaluation against the 30-query labeled set
         run: python -m rag_compliance.cli evaluate --embedder fake
+      - name: Agent smoke test (fake brain — proves the loop, not model quality)
+        run: python -m rag_compliance.cli agent --question "What is residual risk?" --brain fake
