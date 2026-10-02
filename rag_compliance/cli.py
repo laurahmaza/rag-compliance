@@ -105,12 +105,8 @@ def cmd_evaluate(args: argparse.Namespace) -> None:
         out_path.write_text(json.dumps(payload, indent=2))
         print(f"\nsaved -> {out_path}")
 
-        if args.plot:
-        from .plotting import plot_recall_comparison
-        plot_path = plot_recall_comparison(summaries, f"Recall@{args.k} by retriever", args.plot)
-        print(f"saved plot -> {plot_path}")
-
-
+            
+        
 def _tools_schema() -> list[dict]:
     return [
         {
