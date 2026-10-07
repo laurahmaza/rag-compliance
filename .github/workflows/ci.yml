@@ -1,4 +1,4 @@
-name: CI
+﻿name: CI
 
 on:
   push:
@@ -16,7 +16,9 @@ jobs:
         run: pip install -e ".[dev]"
       - name: Run unit tests
         run: pytest -v
-      - name: Real BM25 evaluation against the 30-query labeled set
-        run: python -m rag_compliance.cli evaluate --embedder fake
+      - name: BM25 eval on the 30-query labeled set
+        run: python -m rag_compliance.cli evaluate --output results/ci_eval.json
+      - name: Quality gate (BM25 recall@10 >= 0.80, MRR >= 0.70)
+        run: python -m rag_compliance.quality_gate results/ci_eval.json
       - name: Agent smoke test (fake brain — proves the loop, not model quality)
         run: python -m rag_compliance.cli agent --question "What is residual risk?" --brain fake
