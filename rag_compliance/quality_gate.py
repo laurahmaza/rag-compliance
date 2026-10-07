@@ -20,7 +20,7 @@ from pathlib import Path
 
 
 DEFAULT_GATES = {
-    "bm25": {"mean_recall_at_k": 0.80, "mean_mrr": 0.70},
+    "bm25": {"mean_recall_at_k": 0.99, "mean_mrr": 0.70},
 }
 
 
@@ -66,3 +66,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
